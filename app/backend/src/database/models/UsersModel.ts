@@ -31,6 +31,7 @@ SequelizeUsers.init({
   username: {
     type: DataTypes.STRING,
     allowNull: false,
+    field: 'username',
   },
   role: {
     type: DataTypes.STRING,
@@ -45,9 +46,8 @@ SequelizeUsers.init({
     allowNull: false,
   },
 }, {
-  underscored: true,
   sequelize: db,
-  modelName: 'teams',
+  modelName: 'users',
   timestamps: false,
 });
 

@@ -4,7 +4,6 @@ export interface ICRUDModelCreator<T> {
 
 export interface ICRUDModelReader<T> {
   findAll(): Promise<T[]>,
-  findById(id: number): Promise<T | null>,
 }
 
 export interface ICRUDModelUpdater<T> {

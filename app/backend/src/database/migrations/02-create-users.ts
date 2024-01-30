@@ -14,6 +14,7 @@ export default {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
+        field: 'username',
       },
       role: {
         type: DataTypes.STRING,
