@@ -12,7 +12,7 @@ export default class UsersService {
   public async login(email: string, password: string): Promise<ServiceResponse<LoginResponse>> {
     const user = await this.userModel.findByUserEmail(email);
     if (!user) return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
-    if (!await bcrypt.compare(password, user.password)) {
+    if (!bcrypt.compareSync(password, user.password)) {
       return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
     }
     const payload = { sub: Number(user.id), role: user.role, email: user.email };
