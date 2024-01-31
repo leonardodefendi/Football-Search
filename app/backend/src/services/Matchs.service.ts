@@ -24,4 +24,10 @@ export default class MatchsService {
       throw new Error('Team not found');
     }
   }
+
+  async updateScore(homeTeamGoals:
+  number, awayTeamGoals: number, id: number): Promise<ServiceResponse<{ message:'ok' }>> {
+    await this.matchModel.updateScore(homeTeamGoals, awayTeamGoals, id);
+    return { status: 'SUCCESSFUL', data: { message: 'ok' } };
+  }
 }

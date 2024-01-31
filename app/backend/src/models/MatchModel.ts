@@ -35,7 +35,15 @@ export default class MatchModel implements IMatchModel {
     try {
       await this.matchsModel.update({ inProgress: false }, { where: { id } });
     } catch (error) {
-      throw new Error('Team not found');
+      throw new Error('Match not found');
+    }
+  }
+
+  async updateScore(homeTeamGoals: number, awayTeamGoals: number, id: number): Promise<void> {
+    try {
+      await this.matchsModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    } catch (error) {
+      throw new Error('Match not found');
     }
   }
 }

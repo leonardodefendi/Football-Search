@@ -16,4 +16,10 @@ matchsRouter.patch(
   (req: Request, res: Response) => matchsController.updateProgress(req, res),
 );
 
+matchsRouter.patch(
+  '/:id',
+  AuthMiddleware.handle,
+  (req: Request, res: Response) => matchsController.updateScore(req, res),
+);
+
 export default matchsRouter;
