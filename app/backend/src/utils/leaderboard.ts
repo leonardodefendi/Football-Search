@@ -1,4 +1,4 @@
-import { IMatch } from '../Interfaces/matches/IMatch';
+import { IMatch, LeaderboardType } from '../Interfaces/matches/IMatch';
 
 const totalGamesHome = (teamId: number, matches: IMatch[]): number => {
   const games = matches
@@ -100,6 +100,26 @@ const goalsOwnAway = (teamId: number, matches: IMatch[]): number => {
   }, 0);
   return goals;
 };
+const goalsBalanceHome = (teamId: number, matches: IMatch[]): number => {
+  const golsFavor = goalsFavorHome(teamId, matches);
+  const goalsOwn = goalsOwnHome(teamId, matches);
+  const goalsBalance = golsFavor - goalsOwn;
+  return goalsBalance;
+};
+
+const efficiencyHome = (teamId: number, matches: IMatch[]): string => {
+  const P = totalPointsHome(teamId, matches);
+  const J = totalGamesHome(teamId, matches);
+  const efficiency = ((P / (J * 3)) * 100).toFixed(2);
+  return efficiency;
+};
+
+const sortTeams = (team: LeaderboardType[]): LeaderboardType[] => {
+  team.sort((a, b) => b.totalPoints - a.totalPoints
+  || b.goalsBalance - a.goalsBalance
+  || b.goalsFavor - a.goalsFavor);
+  return team;
+};
 
 export {
   totalGamesHome,
@@ -116,4 +136,7 @@ export {
   goalsFavorAway,
   goalsOwnHome,
   goalsOwnAway,
+  goalsBalanceHome,
+  efficiencyHome,
+  sortTeams,
 };

@@ -3,9 +3,11 @@ import TeamModel from '../models/TeamModel';
 import { goalsFavorHome, goalsOwnHome, totalDrawsHome,
   totalGamesHome,
   totalLosesHome,
-
+  goalsBalanceHome,
   totalPointsHome,
-  totalVictoriesHome } from '../utils/leaderboard';
+  efficiencyHome,
+  totalVictoriesHome,
+  sortTeams } from '../utils/leaderboard';
 
 export default class LeaderboardService {
   constructor(
@@ -25,7 +27,10 @@ export default class LeaderboardService {
       totalLosses: totalLosesHome(team.id, matches),
       goalsFavor: goalsFavorHome(team.id, matches),
       goalsOwn: goalsOwnHome(team.id, matches),
+      goalsBalance: goalsBalanceHome(team.id, matches),
+      efficiency: efficiencyHome(team.id, matches),
     }));
+    sortTeams(homeMatches);
     return { status: 'SUCCESSFUL', data: homeMatches };
   }
 }
