@@ -18,29 +18,34 @@ const totalVictoriesAway = (teamId: number, matches: IMatch[]): number => {
   return victories.length;
 };
 
-const totalLoses = (teamId: number, matches: IMatch[]): number => {
+const totalLosesHome = (teamId: number, matches: IMatch[]): number => {
   const losesHome = matches.filter((match) =>
     match.homeTeamId === teamId && match.homeTeamGoals < match.awayTeamGoals);
+  return losesHome.length;
+};
+const totalLosesAway = (teamId: number, matches: IMatch[]): number => {
   const losesAway = matches.filter((match) =>
     match.awayTeamId === teamId && match.awayTeamGoals < match.homeTeamGoals);
-  const total = losesHome.length + losesAway.length;
-  return total;
+  return losesAway.length;
 };
 
-const totalDraws = (teamId: number, matches: IMatch[]): number => {
+const totalDrawsHome = (teamId: number, matches: IMatch[]): number => {
   const drawsHome = matches.filter((match) =>
     match.homeTeamId === teamId && match.awayTeamGoals === match.homeTeamGoals);
+  return drawsHome.length;
+};
+const totalDrawsAway = (teamId: number, matches: IMatch[]): number => {
   const drawsAway = matches.filter((match) =>
     match.awayTeamId === teamId && match.awayTeamGoals === match.homeTeamGoals);
-  const total = drawsAway.length + drawsHome.length;
-  return total;
+  return drawsAway.length;
 };
 
 const totalPoints = (teamId: number, matches: IMatch[]): number => {
-  const draws = totalDraws(teamId, matches) * 1;
+  const drawsHome = totalDrawsHome(teamId, matches) * 1;
+  const drawsAway = totalDrawsAway(teamId, matches) * 1;
   const totalVictories = (totalVictoriesHome(teamId, matches)
    + totalVictoriesAway(teamId, matches)) * 3;
-  const totalPoint = draws + totalVictories;
+  const totalPoint = drawsHome + drawsAway + totalVictories;
   return totalPoint;
 };
 
@@ -76,8 +81,10 @@ export {
   totalGames,
   totalVictoriesHome,
   totalVictoriesAway,
-  totalLoses,
-  totalDraws,
+  totalLosesHome,
+  totalLosesAway,
+  totalDrawsHome,
+  totalDrawsAway,
   totalPoints,
   goalsFavor,
   goalsOwn,
