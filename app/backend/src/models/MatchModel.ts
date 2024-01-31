@@ -30,4 +30,12 @@ export default class MatchModel implements IMatchModel {
     });
     return teams;
   }
+
+  async patchInprogress(id: number): Promise<void> {
+    try {
+      await this.matchsModel.update({ inProgress: false }, { where: { id } });
+    } catch (error) {
+      throw new Error('Team not found');
+    }
+  }
 }
