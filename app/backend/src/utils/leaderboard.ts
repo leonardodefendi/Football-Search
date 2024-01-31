@@ -8,13 +8,13 @@ const totalGamesHome = (teamId: number, matches: IMatch[]): number => {
 const totalGamesAway = (teamId: number, matches: IMatch[]): number => {
   const games = matches
     .filter((match) => teamId === match.awayTeamId);
+  console.log(teamId, games.length);
   return games.length;
 };
 
 const totalVictoriesHome = (teamId: number, matches: IMatch[]): number => {
   const victories = matches.filter((match) =>
     match.homeTeamId === teamId && match.homeTeamGoals > match.awayTeamGoals);
-  console.log(teamId, victories.length);
   return victories.length;
 };
 
@@ -106,10 +106,22 @@ const goalsBalanceHome = (teamId: number, matches: IMatch[]): number => {
   const goalsBalance = golsFavor - goalsOwn;
   return goalsBalance;
 };
+const goalsBalanceAway = (teamId: number, matches: IMatch[]): number => {
+  const golsFavor = goalsFavorAway(teamId, matches);
+  const goalsOwn = goalsOwnAway(teamId, matches);
+  const goalsBalance = golsFavor - goalsOwn;
+  return goalsBalance;
+};
 
 const efficiencyHome = (teamId: number, matches: IMatch[]): string => {
   const P = totalPointsHome(teamId, matches);
   const J = totalGamesHome(teamId, matches);
+  const efficiency = ((P / (J * 3)) * 100).toFixed(2);
+  return efficiency;
+};
+const efficiencyAway = (teamId: number, matches: IMatch[]): string => {
+  const P = totalPointsAway(teamId, matches);
+  const J = totalGamesAway(teamId, matches);
   const efficiency = ((P / (J * 3)) * 100).toFixed(2);
   return efficiency;
 };
@@ -139,4 +151,6 @@ export {
   goalsBalanceHome,
   efficiencyHome,
   sortTeams,
+  goalsBalanceAway,
+  efficiencyAway,
 };

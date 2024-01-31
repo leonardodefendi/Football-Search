@@ -9,7 +9,6 @@ export default class AuthMiddleware {
     try {
       const secret = process.env.JWT_SECRET ?? '';
       const payload = jwt.verify(token, secret);
-      console.log(payload);
       res.locals.auth = payload;
     } catch (err) {
       return res.status(401).json({ message: 'Token must be a valid token' });
