@@ -1,9 +1,11 @@
 import MatchModel from '../models/MatchModel';
 import TeamModel from '../models/TeamModel';
-import { goalsFavor, goalsOwn, totalDrawsHome, totalGames,
+import { goalsFavorHome, goalsOwnHome, totalDrawsHome,
+  totalGamesHome,
   totalLosesHome,
-  totalPoints,
-  totalVictoriesAway, totalVictoriesHome } from '../utils/leaderboard';
+
+  totalPointsHome,
+  totalVictoriesHome } from '../utils/leaderboard';
 
 export default class LeaderboardService {
   constructor(
@@ -16,13 +18,13 @@ export default class LeaderboardService {
     const matches = await this.matchModel.findMatchsFiltred('false');
     const homeMatches = teams.map((team) => ({
       name: team.teamName,
-      totalGames: totalGames(team.id, matches),
-      totalVictories: totalVictoriesHome(team.id, matches) + totalVictoriesAway(team.id, matches),
-      totalLosses: totalLosesHome(team.id, matches),
+      totalPoints: totalPointsHome(team.id, matches),
+      totalGames: totalGamesHome(team.id, matches),
+      totalVictories: totalVictoriesHome(team.id, matches),
       totalDraws: totalDrawsHome(team.id, matches),
-      totalPoints: totalPoints(team.id, matches),
-      goalsFavor: goalsFavor(team.id, matches),
-      goalsOwn: goalsOwn(team.id, matches),
+      totalLosses: totalLosesHome(team.id, matches),
+      goalsFavor: goalsFavorHome(team.id, matches),
+      goalsOwn: goalsOwnHome(team.id, matches),
     }));
     return { status: 'SUCCESSFUL', data: homeMatches };
   }

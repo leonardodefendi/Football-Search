@@ -1,14 +1,20 @@
 import { IMatch } from '../Interfaces/matches/IMatch';
 
-const totalGames = (teamId: number, matches: IMatch[]): number => {
+const totalGamesHome = (teamId: number, matches: IMatch[]): number => {
   const games = matches
-    .filter((match) => teamId === match.awayTeamId || teamId === match.homeTeamId);
+    .filter((match) => teamId === match.homeTeamId);
+  return games.length;
+};
+const totalGamesAway = (teamId: number, matches: IMatch[]): number => {
+  const games = matches
+    .filter((match) => teamId === match.awayTeamId);
   return games.length;
 };
 
 const totalVictoriesHome = (teamId: number, matches: IMatch[]): number => {
   const victories = matches.filter((match) =>
     match.homeTeamId === teamId && match.homeTeamGoals > match.awayTeamGoals);
+  console.log(teamId, victories.length);
   return victories.length;
 };
 
@@ -40,35 +46,53 @@ const totalDrawsAway = (teamId: number, matches: IMatch[]): number => {
   return drawsAway.length;
 };
 
-const totalPoints = (teamId: number, matches: IMatch[]): number => {
+const totalPointsHome = (teamId: number, matches: IMatch[]): number => {
   const drawsHome = totalDrawsHome(teamId, matches) * 1;
+  const totalVictories = totalVictoriesHome(teamId, matches) * 3;
+  const totalPoint = drawsHome + totalVictories;
+  return totalPoint;
+};
+const totalPointsAway = (teamId: number, matches: IMatch[]): number => {
   const drawsAway = totalDrawsAway(teamId, matches) * 1;
-  const totalVictories = (totalVictoriesHome(teamId, matches)
-   + totalVictoriesAway(teamId, matches)) * 3;
-  const totalPoint = drawsHome + drawsAway + totalVictories;
+  const totalVictories = totalVictoriesAway(teamId, matches) * 3;
+  const totalPoint = drawsAway + totalVictories;
   return totalPoint;
 };
 
-const goalsFavor = (teamId: number, matches: IMatch[]): number => {
+const goalsFavorHome = (teamId: number, matches: IMatch[]): number => {
   const goalsHome = matches.reduce((acc, curr) => {
     let soma = acc;
     if (curr.homeTeamId === teamId) {
       soma += curr.homeTeamGoals;
     }
+    return soma;
+  }, 0);
+  return goalsHome;
+};
+const goalsFavorAway = (teamId: number, matches: IMatch[]): number => {
+  const goalsAway = matches.reduce((acc, curr) => {
+    let soma = acc;
     if (curr.awayTeamId === teamId) {
       soma += curr.awayTeamGoals;
     }
     return soma;
   }, 0);
-  return goalsHome;
+  return goalsAway;
 };
 
-const goalsOwn = (teamId: number, matches: IMatch[]): number => {
+const goalsOwnHome = (teamId: number, matches: IMatch[]): number => {
   const goals = matches.reduce((acc, curr) => {
     let soma = acc;
     if (curr.homeTeamId === teamId) {
       soma += curr.awayTeamGoals;
     }
+    return soma;
+  }, 0);
+  return goals;
+};
+const goalsOwnAway = (teamId: number, matches: IMatch[]): number => {
+  const goals = matches.reduce((acc, curr) => {
+    let soma = acc;
     if (curr.awayTeamId === teamId) {
       soma += curr.homeTeamGoals;
     }
@@ -78,14 +102,18 @@ const goalsOwn = (teamId: number, matches: IMatch[]): number => {
 };
 
 export {
-  totalGames,
+  totalGamesHome,
+  totalGamesAway,
   totalVictoriesHome,
   totalVictoriesAway,
   totalLosesHome,
   totalLosesAway,
   totalDrawsHome,
   totalDrawsAway,
-  totalPoints,
-  goalsFavor,
-  goalsOwn,
+  totalPointsHome,
+  totalPointsAway,
+  goalsFavorHome,
+  goalsFavorAway,
+  goalsOwnHome,
+  goalsOwnAway,
 };
