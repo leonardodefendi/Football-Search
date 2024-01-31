@@ -2,6 +2,7 @@ import { IMatch } from '../Interfaces/matches/IMatch';
 import { IMatchModel } from '../Interfaces/matches/IMatchModel';
 import SequelizeMatches from '../database/models/MatchesModel';
 import SequelizeTeam from '../database/models/TeamsModel';
+import { MatchInfos } from '../Interfaces/matches/MatchTypes';
 
 export default class MatchModel implements IMatchModel {
   private matchsModel = SequelizeMatches;
@@ -44,6 +45,17 @@ export default class MatchModel implements IMatchModel {
       await this.matchsModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
     } catch (error) {
       throw new Error('Match not found');
+    }
+  }
+
+  async create(matchInfos: MatchInfos): Promise<IMatch> {
+    const { homeTeamId, homeTeamGoals, awayTeamGoals, awayTeamId } = matchInfos;
+    try {
+      const created = await this.matchsModel
+        .create({ homeTeamGoals, homeTeamId, awayTeamGoals, awayTeamId, inProgress: true });
+      return created;
+    } catch (error) {
+      throw new Error('Não foi possivel criar a partida');
     }
   }
 }
