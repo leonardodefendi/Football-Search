@@ -10,4 +10,9 @@ export default class MatchsService {
     if (!matchs) return { status: 'NOT_FOUND', data: { message: 'Teams not found' } };
     return { status: 'SUCCESSFUL', data: matchs };
   }
+
+  async getFiltredMatchs(query: string): Promise<ServiceResponse<IMatch[]>> {
+    const matchsFiltred = await this.matchModel.findMatchsFiltred(query);
+    return { status: 'SUCCESSFUL', data: matchsFiltred };
+  }
 }

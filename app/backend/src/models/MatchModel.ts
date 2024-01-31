@@ -7,7 +7,7 @@ export default class MatchModel implements IMatchModel {
   private matchsModel = SequelizeMatches;
 
   async findAll(): Promise<IMatch[]> {
-    const teams = this.matchsModel.findAll({
+    const teams = await this.matchsModel.findAll({
       include: [
         { model: SequelizeTeam, as: 'homeTeam', attributes: ['teamName'] },
         { model: SequelizeTeam, as: 'awayTeam', attributes: ['teamName'] },
@@ -15,6 +15,19 @@ export default class MatchModel implements IMatchModel {
       attributes: { exclude: ['home_team_id', 'away_team_id'] },
     });
 
+    return teams;
+  }
+
+  async findMatchsFiltred(query: string): Promise<IMatch[]> {
+    const progress = query === 'true';
+    const teams = await this.matchsModel.findAll({
+      where: { inProgress: progress },
+      include: [
+        { model: SequelizeTeam, as: 'homeTeam', attributes: ['teamName'] },
+        { model: SequelizeTeam, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+      attributes: { exclude: ['home_team_id', 'away_team_id'] },
+    });
     return teams;
   }
 }
