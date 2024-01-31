@@ -59,6 +59,14 @@ const totalPointsAway = (teamId: number, matches: IMatch[]): number => {
   return totalPoint;
 };
 
+const totalPointsAll = (teamId: number, matches: IMatch[]): number => {
+  const draws = (totalDrawsAway(teamId, matches) + totalDrawsHome(teamId, matches)) * 1;
+  const totalVictories = (totalVictoriesHome(teamId, matches)
+  + totalVictoriesAway(teamId, matches)) * 3;
+  const totalPoints = draws + totalVictories;
+  return totalPoints;
+};
+
 const goalsFavorHome = (teamId: number, matches: IMatch[]): number => {
   const goalsHome = matches.reduce((acc, curr) => {
     let soma = acc;
@@ -126,6 +134,13 @@ const efficiencyAway = (teamId: number, matches: IMatch[]): string => {
   return efficiency;
 };
 
+const efficiencyTotal = (teamId: number, matches: IMatch[]): string => {
+  const P = totalPointsAway(teamId, matches) + totalPointsHome(teamId, matches);
+  const J = totalGamesAway(teamId, matches) + totalGamesHome(teamId, matches);
+  const efficiency = ((P / (J * 3)) * 100).toFixed(2);
+  return efficiency;
+};
+
 const sortTeams = (team: LeaderboardType[]): LeaderboardType[] => {
   team.sort((a, b) => b.totalPoints - a.totalPoints
   || b.goalsBalance - a.goalsBalance
@@ -153,4 +168,6 @@ export {
   sortTeams,
   goalsBalanceAway,
   efficiencyAway,
+  efficiencyTotal,
+  totalPointsAll,
 };

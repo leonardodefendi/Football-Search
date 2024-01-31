@@ -1,3 +1,4 @@
+import { ServiceResponse } from '../Interfaces/serviceResponse';
 import MatchModel from '../models/MatchModel';
 import TeamModel from '../models/TeamModel';
 import { goalsFavorHome, goalsOwnHome, totalDrawsHome,
@@ -16,7 +17,10 @@ import { goalsFavorHome, goalsOwnHome, totalDrawsHome,
   goalsOwnAway,
   goalsBalanceAway,
   efficiencyAway,
-  totalGamesAway } from '../utils/leaderboard';
+  totalGamesAway,
+  efficiencyTotal,
+  totalPointsAll } from '../utils/leaderboard';
+import { LeaderboardType } from '../Interfaces/matches/IMatch';
 
 export default class LeaderboardService {
   constructor(
@@ -24,7 +28,7 @@ export default class LeaderboardService {
     private teamModel = new TeamModel(),
   ) {}
 
-  async getAllLeaderHome() {
+  async getAllLeaderHome(): Promise<ServiceResponse<LeaderboardType[]>> {
     const teams = await this.teamModel.findAll();
     const matches = await this.matchModel.findMatchsFiltred('false');
     const homeMatches = teams.map((team) => ({
@@ -43,10 +47,10 @@ export default class LeaderboardService {
     return { status: 'SUCCESSFUL', data: homeMatches };
   }
 
-  async getAllLeaderAway() {
+  async getAllLeaderAway(): Promise<ServiceResponse<LeaderboardType[]>> {
     const teams = await this.teamModel.findAll();
     const matches = await this.matchModel.findMatchsFiltred('false');
-    const homeMatches = teams.map((team) => ({
+    const awayMatches = teams.map((team) => ({
       name: team.teamName,
       totalPoints: totalPointsAway(team.id, matches),
       totalGames: totalGamesAway(team.id, matches),
@@ -58,7 +62,26 @@ export default class LeaderboardService {
       goalsBalance: goalsBalanceAway(team.id, matches),
       efficiency: efficiencyAway(team.id, matches),
     }));
-    sortTeams(homeMatches);
-    return { status: 'SUCCESSFUL', data: homeMatches };
+    sortTeams(awayMatches);
+    return { status: 'SUCCESSFUL', data: awayMatches };
+  }
+
+  async getAllLeaderbord(): Promise<ServiceResponse<LeaderboardType[]>> {
+    const teams = await this.teamModel.findAll();
+    const matches = await this.matchModel.findMatchsFiltred('false');
+    const allMatches = teams.map((team) => ({
+      name: team.teamName,
+      totalPoints: totalPointsAll(team.id, matches),
+      totalGames: totalGamesAway(team.id, matches) + totalGamesHome(team.id, matches),
+      totalVictories: totalVictoriesAway(team.id, matches) + totalVictoriesHome(team.id, matches),
+      totalDraws: totalDrawsAway(team.id, matches) + totalDrawsHome(team.id, matches),
+      totalLosses: totalLosesAway(team.id, matches) + totalLosesHome(team.id, matches),
+      goalsFavor: goalsFavorAway(team.id, matches) + goalsFavorHome(team.id, matches),
+      goalsOwn: goalsOwnAway(team.id, matches) + goalsOwnHome(team.id, matches),
+      goalsBalance: goalsBalanceAway(team.id, matches) + goalsBalanceHome(team.id, matches),
+      efficiency: efficiencyTotal(team.id, matches),
+    }));
+    sortTeams(allMatches);
+    return { status: 'SUCCESSFUL', data: allMatches };
   }
 }
