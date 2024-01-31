@@ -5,6 +5,7 @@ import { IUserModel } from '../Interfaces/users/IUserModel';
 import UserModel from '../models/UserModel';
 
 type LoginResponse = { token: string };
+type Payload = { sub: number, role: string, email: string, iat?: number, exp?: number };
 
 export default class UsersService {
   constructor(private userModel: IUserModel = new UserModel()) {}
@@ -15,7 +16,7 @@ export default class UsersService {
     if (!bcrypt.compareSync(password, user.password)) {
       return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
     }
-    const payload = { sub: Number(user.id), role: user.role, email: user.email };
+    const payload: Payload = { sub: Number(user.id), role: user.role, email: user.email };
     const secret = process.env.JWT_SECRET ?? '';
     const token = jwt.sign(payload, secret, { expiresIn: '7d' });
     return { status: 'SUCCESSFUL', data: { token } };
