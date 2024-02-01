@@ -12,7 +12,7 @@ export default class MatchsService {
 
   async getAllMatchs(): Promise<ServiceResponse<IMatch[]>> {
     const matchs = await this.matchModel.findAll();
-    if (!matchs) return { status: 'NOT_FOUND', data: { message: 'Teams not found' } };
+    if (matchs.length === 0) return { status: 'NOT_FOUND', data: { message: 'Teams not found' } };
     return { status: 'SUCCESSFUL', data: matchs };
   }
 
@@ -22,12 +22,8 @@ export default class MatchsService {
   }
 
   async updateProgress(id:number): Promise<ServiceResponse<{ message: 'Finished' }>> {
-    try {
-      await this.matchModel.patchInprogress(id);
-      return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
-    } catch (error) {
-      throw new Error('Team not found');
-    }
+    await this.matchModel.patchInprogress(id);
+    return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
 
   async updateScore(homeTeamGoals:

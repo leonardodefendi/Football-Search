@@ -1,12 +1,13 @@
 import { App } from "../app";
 import * as sinon from 'sinon';
 import * as chai from 'chai'
-import { invalidPassword, invalidEmail, userValid, validBodyLogin } from "./mocks/users.mock";
+import { invalidPassword, invalidEmail, userValid, validBodyLogin, mockPayload, token, invalidToken } from "./mocks/users.mock";
 import Validations from "../middlewares/validations";
 import * as jwt from 'jsonwebtoken'
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import SequelizeUsers from "../database/models/UsersModel";
+import AuthMiddleware from "../middlewares/auth";
 
 chai.use(chaiHttp);
 
@@ -28,6 +29,11 @@ describe('Testes /login e /login/role', function() {
     const {status, body} = await chai.request(app).post('/login').send({email: 'admin@admin.com'})
     expect(status).to.equal(400);
     expect(body).to.deep.equal({ message: 'All fields must be filled' })
+  })
+  it('Retorna erro se não for passado uma senha menor que 6 carcters /login', async function() {
+    const {status, body} = await chai.request(app).post('/login').send({email: 'admin@admin.com', password: '123'})
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Invalid email or password' })
   })
   it('Deve retornar um erro se a senha estiver incorreta /login', async function() {
     const {status, body} = await chai.request(app).post('/login').send(invalidPassword);
@@ -61,5 +67,19 @@ describe('Testes /login e /login/role', function() {
     expect(status).to.equal(401);
     expect(body).to.deep.equal({ message: 'Token not found' })
   })
+
+  it('Verifica se retorna a role corretamente /login/role', async function() {
+    const {status, body} = await chai.request(app).get('/login/role').set('Authorization', token);
+    expect(status).to.equal(200);
+    expect(body).to.deep.equal({role: 'admin'});
+  })
+
+  it('Verifica se for passado um token invalido', async function() {
+    const {status, body} = await chai.request(app).get('/login/role').set('Authorization', invalidToken);
+    expect(status).to.equal(401);
+    expect(body).to.deep.equal({ message: 'Token must be a valid token' });
+  })
+
+ 
 
 })

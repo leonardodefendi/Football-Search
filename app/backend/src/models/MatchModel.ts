@@ -33,29 +33,18 @@ export default class MatchModel implements IMatchModel {
   }
 
   async patchInprogress(id: number): Promise<void> {
-    try {
-      await this.matchsModel.update({ inProgress: false }, { where: { id } });
-    } catch (error) {
-      throw new Error('Match not found');
-    }
+    await this.matchsModel.update({ inProgress: false }, { where: { id } });
   }
 
   async updateScore(homeTeamGoals: number, awayTeamGoals: number, id: number): Promise<void> {
-    try {
-      await this.matchsModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
-    } catch (error) {
-      throw new Error('Match not found');
-    }
+    await this.matchsModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
   }
 
   async create(matchInfos: MatchInfos): Promise<IMatch> {
     const { homeTeamId, homeTeamGoals, awayTeamGoals, awayTeamId } = matchInfos;
-    try {
-      const created = await this.matchsModel
-        .create({ homeTeamGoals, homeTeamId, awayTeamGoals, awayTeamId, inProgress: true });
-      return created;
-    } catch (error) {
-      throw new Error('Não foi possivel criar a partida');
-    }
+
+    const created = await this.matchsModel
+      .create({ homeTeamGoals, homeTeamId, awayTeamGoals, awayTeamId, inProgress: true });
+    return created;
   }
 }

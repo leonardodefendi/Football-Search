@@ -1236,6 +1236,49 @@ const matchesOrderLeader = [
 		"efficiency": "11.11"
 	}
 ]
+
+const scoreMatchesUpdate ={
+  "homeTeamGoals": 3,
+  "awayTeamGoals": 1
+}
+
+const InvaliCreatedMatches = {
+  "homeTeamId": 70,
+  "awayTeamId": 90, 
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
+const validCreatedMatches = {
+  "homeTeamId": 16, 
+  "awayTeamId": 8, 
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
+const teamsWithSameId = {
+  "homeTeamId": 16, 
+  "awayTeamId": 16, 
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
+
+const teamHome = {
+	"id": 16,
+	"teamName": "São Paulo"
+}
+
+const teamAway = {
+	"id": 8,
+	"teamName": "Grêmio"
+}
+
+const bodyReturnCreatedMatch = {
+  "id": 1,
+  "homeTeamId": 16,
+  "homeTeamGoals": 2,
+  "awayTeamId": 8,
+  "awayTeamGoals": 2,
+  "inProgress": true
+}
 export  {
   matches,
   matchesInProgres,
@@ -1244,4 +1287,11 @@ export  {
 	matchesOrder,
 	matchesOrderAway,
 	matchesOrderLeader,
+	scoreMatchesUpdate,
+	InvaliCreatedMatches,
+	validCreatedMatches,
+	teamHome,
+	teamAway,
+	bodyReturnCreatedMatch,
+	teamsWithSameId,
 }

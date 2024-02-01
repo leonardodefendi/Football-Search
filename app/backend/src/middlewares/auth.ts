@@ -3,11 +3,11 @@ import { NextFunction, Request, Response } from 'express';
 
 export default class AuthMiddleware {
   static handle(req: Request, res: Response, next: NextFunction) {
-    const tokenHeader = req.header('Authorization');
+    const tokenHeader = req.headers.authorization;
     if (!tokenHeader) return res.status(401).json({ message: 'Token not found' });
     const token = tokenHeader.split(' ')[1];
     try {
-      const secret = process.env.JWT_SECRET ?? '';
+      const secret = process.env.JWT_SECRET ?? 'jwt_secret';
       const payload = jwt.verify(token, secret);
       res.locals.auth = payload;
     } catch (err) {
