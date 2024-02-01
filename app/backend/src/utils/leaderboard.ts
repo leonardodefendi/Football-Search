@@ -8,7 +8,6 @@ const totalGamesHome = (teamId: number, matches: IMatch[]): number => {
 const totalGamesAway = (teamId: number, matches: IMatch[]): number => {
   const games = matches
     .filter((match) => teamId === match.awayTeamId);
-  console.log(teamId, games.length);
   return games.length;
 };
 
